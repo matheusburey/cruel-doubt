@@ -7,7 +7,7 @@ export default defineNuxtConfig({
       websocket: true,
     },
   },
-  modules: ["@nuxtjs/tailwindcss", "nuxt-mongoose", "nuxt-lucide-icons"],
+  modules: ["@nuxtjs/tailwindcss", "nuxt-mongoose", "nuxt-lucide-icons",'nuxt3-socket.io'],
   srcDir: "src/",
   app: {
     head: {
@@ -22,4 +22,7 @@ export default defineNuxtConfig({
     modelsDir: "models",
     devtools: false,
   },
+  socket: {
+    serverOptions: {}
+  }
 });

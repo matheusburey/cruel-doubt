@@ -2,8 +2,7 @@
 const roomId = ref("");
 
 async function checkRoom() {
-    const res = await $fetch(`/api/room/${roomId.value}`);
-    console.log(res);
+    const res: any = await $fetch(`/api/room/${roomId.value}`);
     if (res?.slug) {
         await navigateTo({ path: `/room/${res?.slug}` });
     }

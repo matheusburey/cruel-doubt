@@ -1,16 +1,20 @@
 <script lang="ts" setup>
 const route = useRoute();
+const { $io } = useNuxtApp()
 
-import { socket } from "~/lib/socket";
+const questions = ref([] as any);
+const socket = ref({} as any)
 
-const questions = ref([]);
+const code = route.params.slug as string
 
 onMounted(() => {
-    socket.emit("join-room", {
+    socket.value = $io('http://localhost:3000')
+
+    socket.value.emit("join-room", {
         roomId: route.params.slug,
     });
 
-    socket.on("all-questions", (messageValue) => {
+    socket.value.on("all-questions", (messageValue: any) => {
         try {
             console.log(messageValue);
             questions.value = messageValue;
@@ -18,7 +22,7 @@ onMounted(() => {
             console.error(e);
         }
     });
-    socket.on("new-question", (messageValue: string) => {
+    socket.value.on("new-question", (messageValue: string) => {
         try {
             console.log(messageValue);
             questions.value.push(messageValue);
@@ -29,12 +33,12 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
-    socket?.disconnect();
+    socket.value?.disconnect();
 });
 </script>
 <template>
     <div class="bg-gray-50 min-h-screen">
-        <HeaderRoom :code="route.params.slug" :isAdmin="true" />
+        <HeaderRoom :code="code" :isAdmin="true" />
         <main class="max-w-4xl w-full flex flex-col px-8 mx-auto">
             <div class="flex gap-4 items-center my-8">
                 <h1 class="text-2xl font-bold font-poppins">Sala</h1>
